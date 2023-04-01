@@ -28,10 +28,11 @@ class HomeVC: UIViewController {
         
         
         setTable()
+        NetworkManager.shared.login()
         getAllTasks()
         searchBar.delegate = self
         self.hideKeyboardWhenTappedAround()
-        NetworkManager.shared.login()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(stopRefresh), name: Constants.stopRefresh, object: nil)
         refreshControl.addTarget(self, action: #selector(refreshButtonPressed), for: .valueChanged)
         tableView.refreshControl = refreshControl
@@ -80,6 +81,7 @@ class HomeVC: UIViewController {
     
     @objc func stopRefresh(sender:AnyObject){
         DispatchQueue.main.async {
+            self.getAllTasks()
             self.tableView.reloadData()
             self.btnRefresh.stopRotating()
             self.refreshControl.endRefreshing()
